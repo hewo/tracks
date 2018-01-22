@@ -1,10 +1,13 @@
 class Todo < ActiveRecord::Base
 
+  attr_accessor :rendered_notes
+
   MAX_DESCRIPTION_LENGTH = 300
   MAX_NOTES_LENGTH = 60000
 
   before_save :render_note
   after_save :save_predecessors
+  after_initialize :render_note
 
   # associations
   belongs_to :context, :touch => true
@@ -396,7 +399,7 @@ class Todo < ActiveRecord::Base
     unless self.notes.nil?
       self.rendered_notes = Tracks::Utils.render_text(self.notes)
     else
-      self.rendered_notes = nil
+      self.rendered_notes = ""
     end
   end
 
