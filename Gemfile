@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~>4.1.0'
-gem 'sass-rails', '~>4.0'
+gem 'rails', '~>4.2.6'
+gem 'sass-rails', '~>5.0'
 gem 'coffee-rails', '~>4.0'
 
 gem 'json', '>=1.8.3'
@@ -38,7 +38,7 @@ gem "aasm"
 gem "htmlentities"
 gem "swf_fu"
 gem "rails_autolink"
-gem "cache_digests"
+#gem "cache_digests"
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
