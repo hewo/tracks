@@ -4,7 +4,7 @@ gem 'rails', '~>4.1.0'
 gem 'sass-rails', '~>4.0'
 gem 'coffee-rails', '~>4.0'
 
-#gem 'json'
+gem 'json', '>=1.8.3'
 
 # todo: remove xml api
 gem 'actionpack-xml_parser', '>=1.0.1'
@@ -24,7 +24,8 @@ gem 'font-awesome-sass'
 # This will prevent a native build of the driver. Building native drivers is not
 # always possible on all hosters
 gem "sqlite3"
-gem "mysql2"
+#gem "mysql2"
+gem 'thin'
 
 # handling keyboard
 gem 'mousetrap-rails' 
