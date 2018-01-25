@@ -63,6 +63,10 @@ abbr,acronym {
     border:0;
 }
 
+@media only screen and (max-device-width: 768px) {
+  font-size: 120%;
+}
+
 & {
     font-size: 80%;
     padding: 0px 10px;
@@ -163,8 +167,8 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: image-url
 }
 
 #display_box {
-    float: none;
-    margin-right: 310px;
+    float: left;
+    //margin-right: 310px;
     padding-left: 5px;
 }
 
@@ -286,7 +290,8 @@ h2 {
 }
 
 div#input_box {
-    position: absolute;
+    //position: absolute;
+    float: left;
     width: 265px;
     margin: 0;
     padding: 0px 0px 0px 0px;
@@ -299,7 +304,7 @@ div#input_box {
 
 }
 
-#input_box ul {list-style-type: circle; font-size: 0.9em;}
+#input_box ul {list-style-type: circle; font-size: 1.0em;}
 
 #input_box ul#predecessor_ul {
     list-style-type: none;
