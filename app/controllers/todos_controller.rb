@@ -51,6 +51,10 @@ class TodosController < ApplicationController
         @xml_todos = params[:limit_to_active_todos] ? @not_done_todos : @todos
         render :xml => @xml_todos.to_xml( *todo_xml_params )
       end
+      format.json do
+        @json_todos = params[:limit_to_active_todos] ? @not_done_todos : @todos
+        render :json => @json_todos.to_json( *todo_xml_params )
+      end
       format.any(:rss, :atom) do
         @feed_title = 'Tracks Actions'.freeze
         @feed_description = "Actions for #{current_user.display_name}"
@@ -150,6 +154,13 @@ class TodosController < ApplicationController
             render_failure @todo.errors.to_xml.html_safe, 409
           end
         end
+        format.json do
+          if @saved
+            head :created, :location => todo_url(@todo)
+          else
+            render_failure @todo.errors.to_json.html_safe, 409
+          end
+        end
       end
     end
   end
@@ -227,6 +238,13 @@ class TodosController < ApplicationController
           head :created, :location => context_url(@todos[0].context)
         else
           render :xml => @todos[0].errors.to_xml, :status => 422
+        end
+      end
+      format.json do
+        if @saved
+          head :created, :location => context_url(@todos[0].context)
+        else
+          render :json => @todos[0].errors.to_json, :status => 422
         end
       end
     end
