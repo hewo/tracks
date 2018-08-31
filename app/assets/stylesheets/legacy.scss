@@ -820,8 +820,12 @@ form {
     width: 270px;
     padding: 5px 10px;
     background-color: #000;
-    color: #eee;
+    // color: #eee;
     border-radius: 5px;
+}
+
+#todo_new_action_container label {
+  color: #eee;
 }
 
 #recurring_new_container img {
