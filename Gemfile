@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 5.0.0'
+gem 'rails', '~> 5.2.1'
 gem 'sass-rails', '~> 5.0'
 gem 'coffee-rails', '~> 4.2.0'
+gem 'bootsnap', '~> 1.1'
 
 #gem 'json'
 
@@ -25,7 +26,7 @@ gem 'jquery-ui-rails' , '~>5.0.5'
 # always possible on all platforms
 # Alternatively use --without <group> arguments to bundler to not install that group
 gem "sqlite3", group: :sqlite
-gem "mysql2", "~> 0.3.17", group: :mysql
+gem "mysql2", "~> 0.4.0", group: :mysql
 
 gem "RedCloth"
 gem "sanitize", ">=3.0.0"
@@ -47,7 +48,7 @@ gem 'bcrypt', '~> 3.1.7'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 1.2'
 
-gem "bootstrap-sass", "3.3.3"
+gem "bootstrap-sass", "3.3.7"
 gem "font-awesome-sass", "~> 4.5.0"
 
 group :development do
@@ -58,12 +59,12 @@ group :development do
 
   gem "bullet"
   gem "rack-mini-profiler"
-  gem "rack-dev-mark"
 end
 
 group :development, :test do
   gem 'byebug'
-  gem "rubocop", "~> 0.49", require: false
+  gem 'listen'
+  gem "rubocop", "~> 0.60", require: false
 end
 
 group :test do
