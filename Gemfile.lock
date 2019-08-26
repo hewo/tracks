@@ -3,6 +3,7 @@ GEM
   specs:
     RedCloth (4.3.2)
     aasm (3.4.0)
+<<<<<<< HEAD
     actioncable (5.0.7)
       actionpack (= 5.0.7)
       nio4r (>= 1.2, < 3.0)
@@ -16,6 +17,21 @@ GEM
     actionpack (5.0.7)
       actionview (= 5.0.7)
       activesupport (= 5.0.7)
+=======
+    actioncable (5.2.3)
+      actionpack (= 5.2.3)
+      nio4r (~> 2.0)
+      websocket-driver (>= 0.6.1)
+    actionmailer (5.2.3)
+      actionpack (= 5.2.3)
+      actionview (= 5.2.3)
+      activejob (= 5.2.3)
+      mail (~> 2.5, >= 2.5.4)
+      rails-dom-testing (~> 2.0)
+    actionpack (5.2.3)
+      actionview (= 5.2.3)
+      activesupport (= 5.2.3)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
       rack (~> 2.0)
       rack-test (~> 0.6.3)
       rails-dom-testing (~> 2.0)
@@ -23,34 +39,60 @@ GEM
     actionpack-xml_parser (2.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
+<<<<<<< HEAD
     actionview (5.0.7)
       activesupport (= 5.0.7)
+=======
+    actionview (5.2.3)
+      activesupport (= 5.2.3)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
       builder (~> 3.1)
       erubis (~> 2.7.0)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+<<<<<<< HEAD
     activejob (5.0.7)
       activesupport (= 5.0.7)
       globalid (>= 0.3.6)
     activemodel (5.0.7)
       activesupport (= 5.0.7)
+=======
+    activejob (5.2.3)
+      activesupport (= 5.2.3)
+      globalid (>= 0.3.6)
+    activemodel (5.2.3)
+      activesupport (= 5.2.3)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
     activemodel-serializers-xml (1.0.2)
       activemodel (> 5.x)
       activesupport (> 5.x)
       builder (~> 3.1)
+<<<<<<< HEAD
     activerecord (5.0.7)
       activemodel (= 5.0.7)
       activesupport (= 5.0.7)
       arel (~> 7.0)
     activesupport (5.0.7)
+=======
+    activerecord (5.2.3)
+      activemodel (= 5.2.3)
+      activesupport (= 5.2.3)
+      arel (>= 9.0)
+    activestorage (5.2.3)
+      actionpack (= 5.2.3)
+      activerecord (= 5.2.3)
+      marcel (~> 0.3.1)
+    activesupport (5.2.3)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    acts_as_list (0.9.15)
+    acts_as_list (0.9.19)
       activerecord (>= 3.0)
     arel (7.1.4)
     ast (2.4.0)
+<<<<<<< HEAD
     autoprefixer-rails (8.6.5)
       execjs
     bcrypt (3.1.12)
@@ -64,6 +106,23 @@ GEM
     byebug (10.0.2)
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
+=======
+    autoprefixer-rails (9.4.7)
+      execjs
+    bcrypt (3.1.13)
+    bootstrap-sass (3.4.1)
+      autoprefixer-rails (>= 5.2.1)
+      sassc (>= 2.0.0)
+    builder (3.2.3)
+    bullet (6.0.1)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
+    byebug (11.0.1)
+    chartjs-ror (3.6.4)
+      rails (>= 3.1)
+    childprocess (1.0.1)
+      rake (< 13.0)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
     climate_control (0.2.0)
     codeclimate-test-reporter (1.0.7)
       simplecov
@@ -74,36 +133,49 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
+<<<<<<< HEAD
     concurrent-ruby (1.0.5)
+=======
+    concurrent-ruby (1.1.5)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
     crass (1.0.4)
     daemons (1.2.6)
     database_cleaner (1.7.0)
     diff-lcs (1.3)
+<<<<<<< HEAD
     docile (1.3.1)
     erubis (2.7.0)
     eventmachine (1.2.7)
+=======
+    docile (1.3.2)
+    erubi (1.8.0)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
     execjs (2.7.0)
-    factory_bot (4.10.0)
+    factory_bot (4.11.1)
       activesupport (>= 3.0.0)
-    factory_bot_rails (4.10.0)
-      factory_bot (~> 4.10.0)
+    factory_bot_rails (4.11.1)
+      factory_bot (~> 4.11.1)
       railties (>= 3.0.0)
     ffi (1.9.25)
     font-awesome-sass (4.5.0)
       sass (>= 3.2)
-    globalid (0.4.1)
+    globalid (0.4.2)
       activesupport (>= 4.2.0)
     htmlentities (4.3.4)
+<<<<<<< HEAD
     i18n (1.1.0)
+=======
+    i18n (1.6.0)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
       concurrent-ruby (~> 1.0)
-    jaro_winkler (1.5.1)
-    jquery-rails (4.3.3)
+    jaro_winkler (1.5.3)
+    jquery-rails (4.3.5)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
-    json (2.1.0)
+    json (2.2.0)
     libv8 (3.16.14.19)
     loofah (2.2.3)
       crass (~> 1.0.2)
@@ -115,11 +187,12 @@ GEM
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
-    mimemagic (0.3.2)
+    mimemagic (0.3.3)
     mini_mime (1.0.1)
-    mini_portile2 (2.3.0)
+    mini_portile2 (2.4.0)
     minitest (5.11.3)
     minitest-stub-const (0.6)
+<<<<<<< HEAD
     mocha (1.6.0)
       metaclass (~> 0.0.1)
     mysql2 (0.3.21)
@@ -128,12 +201,23 @@ GEM
       mini_portile2 (~> 2.3.0)
     nokogumbo (1.5.0)
       nokogiri
+=======
+    mocha (1.9.0)
+      metaclass (~> 0.0.1)
+    mysql2 (0.5.2)
+    nio4r (2.3.1)
+    nokogiri (1.10.3)
+      mini_portile2 (~> 2.4.0)
+    nokogumbo (2.0.1)
+      nokogiri (~> 1.8, >= 1.8.4)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
     paperclip (6.1.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
       mime-types
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
+<<<<<<< HEAD
     parallel (1.12.1)
     parser (2.5.1.2)
       ast (~> 2.4.0)
@@ -157,11 +241,35 @@ GEM
       activesupport (= 5.0.7)
       bundler (>= 1.3.0)
       railties (= 5.0.7)
+=======
+    parallel (1.17.0)
+    parser (2.6.3.0)
+      ast (~> 2.4.0)
+    puma (4.0.1)
+      nio4r (~> 2.0)
+    rack (2.0.7)
+    rack-mini-profiler (1.0.2)
+      rack (>= 1.2.0)
+    rack-test (1.1.0)
+      rack (>= 1.0, < 3)
+    rails (5.2.3)
+      actioncable (= 5.2.3)
+      actionmailer (= 5.2.3)
+      actionpack (= 5.2.3)
+      actionview (= 5.2.3)
+      activejob (= 5.2.3)
+      activemodel (= 5.2.3)
+      activerecord (= 5.2.3)
+      activestorage (= 5.2.3)
+      activesupport (= 5.2.3)
+      bundler (>= 1.3.0)
+      railties (= 5.2.3)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
       sprockets-rails (>= 2.0.0)
-    rails-controller-testing (1.0.2)
-      actionpack (~> 5.x, >= 5.0.1)
-      actionview (~> 5.x, >= 5.0.1)
-      activesupport (~> 5.x)
+    rails-controller-testing (1.0.4)
+      actionpack (>= 5.0.1.x)
+      actionview (>= 5.0.1.x)
+      activesupport (>= 5.0.1.x)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -169,38 +277,61 @@ GEM
       loofah (~> 2.2, >= 2.2.2)
     rails_autolink (1.1.6)
       rails (> 3.1)
+<<<<<<< HEAD
     railties (5.0.7)
       actionpack (= 5.0.7)
       activesupport (= 5.0.7)
+=======
+    railties (5.2.3)
+      actionpack (= 5.2.3)
+      activesupport (= 5.2.3)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
       method_source
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rainbow (3.0.0)
-    rake (12.3.1)
+    rake (12.3.2)
     rb-fsevent (0.10.3)
-    rb-inotify (0.9.10)
-      ffi (>= 0.5.0, < 2)
+    rb-inotify (0.10.0)
+      ffi (~> 1.0)
     ref (2.0.0)
-    rspec-expectations (3.7.0)
+    rspec-expectations (3.8.4)
       diff-lcs (>= 1.2.0, < 2.0)
+<<<<<<< HEAD
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
     rubocop (0.58.2)
+=======
+      rspec-support (~> 3.8.0)
+    rspec-support (3.8.2)
+    rubocop (0.72.0)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.5, != 2.5.1.1)
-      powerpack (~> 0.1)
+      parser (>= 2.6)
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
+<<<<<<< HEAD
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.9.0)
+=======
+      unicode-display_width (>= 1.4.0, < 1.7)
+    ruby-progressbar (1.10.1)
+    ruby_dep (1.5.0)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
     rubyzip (1.2.2)
     safe_yaml (1.0.4)
-    sanitize (4.6.6)
+    sanitize (5.0.0)
       crass (~> 1.0.2)
+<<<<<<< HEAD
       nokogiri (>= 1.4.4)
       nokogumbo (~> 1.4)
     sass (3.5.7)
+=======
+      nokogiri (>= 1.8.0)
+      nokogumbo (~> 2.0)
+    sass (3.7.3)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -211,17 +342,18 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-    selenium-webdriver (2.53.4)
-      childprocess (~> 0.5)
-      rubyzip (~> 1.0)
-      websocket (~> 1.0)
-    simplecov (0.16.1)
+    sassc (2.0.0)
+      ffi (~> 1.9.6)
+      rake
+    selenium-webdriver (3.142.3)
+      childprocess (>= 0.5, < 2.0)
+      rubyzip (~> 1.2, >= 1.2.2)
+    simplecov (0.17.0)
       docile (~> 1.1)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    spring (2.0.2)
-      activesupport (>= 4.2)
+    spring (2.1.0)
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -229,10 +361,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.3.13)
-    swf_fu (2.0.4)
-      coffee-script
-      rails (>= 3.1)
+    sqlite3 (1.4.1)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
     therubyracer (0.12.3)
@@ -245,13 +374,15 @@ GEM
     thor (0.20.0)
     thread_safe (0.3.6)
     tilt (2.0.8)
-    tolk (2.0.0)
-      rails (>= 4.0)
+    tolk (3.1.0)
+      rails (>= 5.0)
       safe_yaml (>= 0.8.6)
+      sass
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    uglifier (4.1.17)
+    uglifier (4.1.20)
       execjs (>= 0.3.0, < 3)
+<<<<<<< HEAD
     unicode-display_width (1.4.0)
     uniform_notifier (1.11.0)
     websocket (1.2.8)
@@ -260,6 +391,15 @@ GEM
     websocket-extensions (0.1.3)
     will_paginate (3.1.6)
     yard (0.9.15)
+=======
+    unicode-display_width (1.6.0)
+    uniform_notifier (1.12.1)
+    websocket-driver (0.7.0)
+      websocket-extensions (>= 0.1.0)
+    websocket-extensions (0.1.3)
+    will_paginate (3.1.7)
+    yard (0.9.20)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
 
 PLATFORMS
   ruby
@@ -270,44 +410,70 @@ DEPENDENCIES
   actionpack-xml_parser (~> 2.0)
   activemodel-serializers-xml (~> 1.0.1)
   acts_as_list
+<<<<<<< HEAD
   bcrypt (~> 3.1.7)
   bootstrap-sass (= 3.3.3)
+=======
+  bcrypt (~> 3.1.13)
+  bootstrap-sass (= 3.4.1)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
   bullet
   byebug
+  chartjs-ror
   codeclimate-test-reporter (= 1.0.7)
   coffee-rails (~> 4.2.0)
   database_cleaner
   factory_bot_rails
   font-awesome-sass (~> 4.5.0)
   htmlentities
-  jquery-rails (~> 4.0)
+  jquery-rails (~> 4.3)
   jquery-ui-rails (~> 5.0.5)
   minitest-stub-const
   mocha
+<<<<<<< HEAD
   mysql2 (~> 0.3.17)
   paperclip
   puma (~> 3.0)
   rack-dev-mark
   rack-mini-profiler
   rails (~> 5.0.0)
+=======
+  mysql2 (~> 0.5.2)
+  paperclip
+  puma (~> 4.0)
+  rack-mini-profiler
+  rails (~> 5.2.3)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
   rails-controller-testing
   rails-dom-testing (~> 2.0.0)
   rails_autolink
   rspec-expectations
+<<<<<<< HEAD
   rubocop (~> 0.49)
   sanitize (>= 3.0.0)
+=======
+  rubocop (~> 0.72)
+  sanitize (~> 5.0)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
   sass-rails (~> 5.0)
-  selenium-webdriver (~> 2.53)
+  selenium-webdriver (~> 3.142)
   simplecov
   spring
   sqlite3
-  swf_fu
   therubyracer
+<<<<<<< HEAD
   thin
   tolk (~> 2.0.0)
+=======
+  tolk (~> 3.1.0)
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf
   uglifier (>= 1.3.0)
   will_paginate
   yard
 
 BUNDLED WITH
+<<<<<<< HEAD
    1.16.2
+=======
+   2.0.1
+>>>>>>> 3ac8702a5ecf1c7abc97240a1965edfb1b402dbf

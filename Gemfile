@@ -1,9 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 5.2.1'
+gem 'rails', '~> 5.2.3'
 gem 'sass-rails', '~> 5.0'
 gem 'coffee-rails', '~> 4.2.0'
-gem 'bootsnap', '~> 1.1'
 
 #gem 'json'
 
@@ -18,7 +17,7 @@ gem 'therubyracer', group: :therubyracer
 
 gem 'uglifier', '>=1.3.0'
 
-gem 'jquery-rails' , '~> 4.0'
+gem 'jquery-rails' , '~> 4.3'
 gem 'jquery-ui-rails' , '~>5.0.5'
 
 # you may comment out the database driver(s) you will not be using.
@@ -26,21 +25,22 @@ gem 'jquery-ui-rails' , '~>5.0.5'
 # always possible on all platforms
 # Alternatively use --without <group> arguments to bundler to not install that group
 gem "sqlite3", group: :sqlite
-gem "mysql2", "~> 0.4.0", group: :mysql
+gem "mysql2", "~> 0.5.2", group: :mysql
 
 gem "RedCloth"
-gem "sanitize", ">=3.0.0"
+gem "sanitize", "~> 5.0"
 gem "will_paginate"
 gem "acts_as_list"
 gem "aasm", '~> 3.4.0'
 gem "htmlentities"
-gem "swf_fu"
 gem "rails_autolink"
-gem 'puma', '~> 3.0'
+gem 'puma', '~> 4.0'
 gem 'paperclip'
 
 # To use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.13'
+
+gem 'chartjs-ror'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'
@@ -48,14 +48,14 @@ gem 'bcrypt', '~> 3.1.7'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 1.2'
 
-gem "bootstrap-sass", "3.3.7"
+gem "bootstrap-sass", "3.4.1"
 gem "font-awesome-sass", "~> 4.5.0"
 
 group :development do
   gem "spring"
   gem "yard"
 
-  gem 'tolk', '~> 2.0.0'
+  gem 'tolk', '~> 3.1.0'
 
   gem "bullet"
   gem "rack-mini-profiler"
@@ -64,7 +64,7 @@ end
 group :development, :test do
   gem 'byebug'
   gem 'listen'
-  gem "rubocop", "~> 0.60", require: false
+  gem "rubocop", "~> 0.72", require: false
 end
 
 group :test do
@@ -78,7 +78,7 @@ group :test do
   gem "mocha", :require => false
   gem "minitest-stub-const"
 
-  gem "selenium-webdriver", "~> 2.53"
+  gem "selenium-webdriver", "~> 3.142"
 
   # uncomment to use the webkit option. This depends on Qt being installed
   # gem "capybara-webkit"

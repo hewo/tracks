@@ -1,7 +1,7 @@
 class TodosController < ApplicationController
 
-  skip_before_action :login_required, :only => [:index, :tag]
-  prepend_before_action :login_or_feed_token_required, :only => [:index, :tag]
+  skip_before_action :login_required, :only => [:index, :tag, :list_deferred, :show, :list_hidden, :done]
+  prepend_before_action :login_or_feed_token_required, :only => [:index, :tag, :list_deferred, :show, :list_hidden, :done]
   append_before_action :find_and_activate_ready, :only => [:index, :list_deferred]
 
   protect_from_forgery :except => :check_deferred
@@ -12,6 +12,14 @@ class TodosController < ApplicationController
     init_data_for_sidebar unless mobile?
 
     @todos = current_user.todos.includes(Todo::DEFAULT_INCLUDES)
+    if params[:context_id]
+      context = current_user.contexts.find(params[:context_id])
+      @todos = @todos.where('context_id' => context.id)
+    end
+    if params[:project_id]
+      project = current_user.projects.find(params[:project_id])
+      @todos = @todos.where('project_id' => project.id)
+    end
     @todos = @todos.limit(sanitize(params[:limit])) if params[:limit]
 
     @not_done_todos = get_not_done_todos
@@ -49,7 +57,7 @@ class TodosController < ApplicationController
       end
       format.xml do
         @xml_todos = params[:limit_to_active_todos] ? @not_done_todos : @todos
-        render :xml => @xml_todos.to_xml( *todo_xml_params )
+        render :xml => @xml_todos.to_xml( *[todo_xml_params[0].merge({:root => :todos})] )
       end
       format.any(:rss, :atom) do
         @feed_title = 'Tracks Actions'.freeze
@@ -251,7 +259,7 @@ class TodosController < ApplicationController
     @todo = current_user.todos.find(params['id'])
     respond_to do |format|
       format.m { render :action => 'show' }
-      format.xml { render :xml => @todo.to_xml( *todo_xml_params ) }
+      format.xml { render :xml => @todo.to_xml( *[todo_xml_params[0].merge({:root => :todo})] ) }
     end
   end
 
@@ -271,7 +279,7 @@ class TodosController < ApplicationController
       end
 
       @status_message = t('todos.added_dependency', :dependency => @predecessor.description)
-      @status_message += t('todos.set_to_pending', :task => @todo.description) unless @original_state == 'pending'
+      @status_message += ' ' + t('todos.set_to_pending', :task => @todo.description) unless @original_state == 'pending'
     else
       @saved = false
     end
@@ -560,7 +568,7 @@ class TodosController < ApplicationController
       format.html
       format.xml do
         completed_todos = current_user.todos.completed
-        render :xml => completed_todos.to_xml( *todo_xml_params )
+        render :xml => completed_todos.to_xml( *[todo_xml_params[0].merge({:root => :todos})] )
       end
     end
   end
@@ -593,7 +601,7 @@ class TodosController < ApplicationController
         init_data_for_sidebar unless mobile?
       end
       format.m
-      format.xml { render :xml => @not_done_todos.to_xml( *todo_xml_params ) }
+      format.xml { render :xml => @not_done_todos.to_xml( *[todo_xml_params[0].merge({:root => :todos})] ) }
     end
   end
 
@@ -629,19 +637,19 @@ class TodosController < ApplicationController
 
     @not_done_todos = todos_with_tag_ids.
       active.not_hidden.
-      reorder('todos.due IS NULL, todos.due ASC, todos.created_at ASC').
+      reorder(Arel.sql('todos.due IS NULL, todos.due ASC, todos.created_at ASC')).
       includes(Todo::DEFAULT_INCLUDES)
     @hidden_todos = todos_with_tag_ids.
       hidden.
-      reorder('todos.completed_at DESC, todos.created_at DESC').
+      reorder(Arel.sql('todos.completed_at DESC, todos.created_at DESC')).
       includes(Todo::DEFAULT_INCLUDES)
     @deferred_todos = todos_with_tag_ids.
       deferred.
-      reorder('todos.show_from ASC, todos.created_at DESC').
+      reorder(Arel.sql('todos.show_from ASC, todos.created_at DESC')).
       includes(Todo::DEFAULT_INCLUDES)
     @pending_todos = todos_with_tag_ids.
       blocked.
-      reorder('todos.show_from ASC, todos.created_at DESC').
+      reorder(Arel.sql('todos.show_from ASC, todos.created_at DESC')).
       includes(Todo::DEFAULT_INCLUDES)
     @todos_without_project = @not_done_todos.select{|t| t.project.nil?}
 
@@ -704,9 +712,8 @@ class TodosController < ApplicationController
 
 
   def tags
-    # TODO: limit to current_user
-    tags_beginning = Tag.where(Tag.arel_table[:name].matches("#{params[:term]}%"))
-    tags_all = Tag.where(Tag.arel_table[:name].matches("%#{params[:term]}%"))
+    tags_beginning = current_user.tags.where(Tag.arel_table[:name].matches("#{params[:term]}%"))
+    tags_all = current_user.tags.where(Tag.arel_table[:name].matches("%#{params[:term]}%"))
     tags_all = tags_all - tags_beginning
 
     respond_to do |format|
@@ -759,7 +766,7 @@ class TodosController < ApplicationController
     @hidden = current_user.todos.hidden
     respond_to do |format|
       format.xml {
-        render :xml => @hidden.to_xml( *todo_xml_params )
+        render :xml => @hidden.to_xml( *[todo_xml_params[0].merge({:root => :todos})] )
       }
     end
   end
@@ -1316,39 +1323,7 @@ end
   end
 
   def get_not_done_todos
-    if params[:done]
-      not_done_todos = current_user.todos.completed.completed_after(Time.zone.now - params[:done].to_i.days)
-    else
-      not_done_todos = current_user.todos.active.not_hidden
-    end
-
-    not_done_todos = not_done_todos.
-      reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").
-      includes(Todo::DEFAULT_INCLUDES)
-
-    not_done_todos = not_done_todos.limit(sanitize(params[:limit])) if params[:limit]
-
-    if params[:due]
-      due_within_when = Time.zone.now + params['due'].to_i.days
-      not_done_todos = not_done_todos.where('todos.due <= ?', due_within_when)
-    end
-
-    if params[:tag]
-      tag = Tag.where(:name => params['tag']).first
-      not_done_todos = not_done_todos.where('taggings.tag_id = ?', tag.id)
-    end
-
-    if params[:context_id]
-      context = current_user.contexts.find(params[:context_id])
-      not_done_todos = not_done_todos.where('context_id' => context.id)
-    end
-
-    if params[:project_id]
-      project = current_user.projects.find(params[:project_id])
-      not_done_todos = not_done_todos.where('project_id' => project)
-    end
-
-    return not_done_todos
+    Todos::UndoneTodosQuery.new(current_user).query(params)
   end
 
   def onsite_redirect_to(destination)

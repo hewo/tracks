@@ -4,8 +4,8 @@ class ContextsController < ApplicationController
 
   before_action :init, :except => [:index, :create, :destroy, :order]
   before_action :set_context_from_params, :only => [:update, :destroy]
-  skip_before_action :login_required, :only => [:index]
-  prepend_before_action :login_or_feed_token_required, :only => [:index]
+  skip_before_action :login_required, :only => [:index, :show]
+  prepend_before_action :login_or_feed_token_required, :only => [:index, :show]
 
   def index
     @all_contexts    = current_user.contexts
@@ -20,7 +20,7 @@ class ContextsController < ApplicationController
     respond_to do |format|
       format.html &render_contexts_html
       format.m    &render_contexts_mobile
-      format.xml  { render :xml => @all_contexts.to_xml( :except => :user_id ) }
+      format.xml  { render :xml => @all_contexts.to_xml(:root => :contexts, :except => :user_id) }
       format.any(:rss, :atom) do
         @feed_title = 'Tracks Contexts'
         @feed_description = "Lists all the contexts for #{current_user.display_name}"
@@ -39,8 +39,8 @@ class ContextsController < ApplicationController
 
     unless @context.nil?
       @max_completed = current_user.prefs.show_number_completed
-      @done = @context.todos.completed.limit(@max_completed).reorder("todos.completed_at DESC, todos.created_at DESC").includes(Todo::DEFAULT_INCLUDES)
-      @not_done_todos = @context.todos.active_or_hidden.not_project_hidden.reorder('todos.due IS NULL, todos.due ASC, todos.created_at ASC').includes(Todo::DEFAULT_INCLUDES)
+      @done = @context.todos.completed.limit(@max_completed).reorder(Arel.sql("todos.completed_at DESC, todos.created_at DESC")).includes(Todo::DEFAULT_INCLUDES)
+      @not_done_todos = @context.todos.active_or_hidden.not_project_hidden.reorder(Arel.sql('todos.due IS NULL, todos.due ASC, todos.created_at ASC')).includes(Todo::DEFAULT_INCLUDES)
       @todos_without_project = @not_done_todos.select{|t| t.project.nil?}
 
       @deferred_todos = @context.todos.deferred.includes(Todo::DEFAULT_INCLUDES)
@@ -57,7 +57,7 @@ class ContextsController < ApplicationController
       respond_to do |format|
         format.html
         format.m    &render_context_mobile
-        format.xml  { render :xml => @context.to_xml( :except => :user_id ) }
+        format.xml  { render :xml => @context.to_xml(:root => :context, :except => :user_id) }
       end
     else
       respond_to do |format|

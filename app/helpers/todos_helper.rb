@@ -120,6 +120,7 @@ module TodosHelper
       toggle = settings[:collapsible] ? container_toggle("toggle_#{settings[:id]}") : ""
       "#{toggle} #{settings[:title]} #{settings[:append_descriptor]}".html_safe
     end
+    header += content_tag(:div, nil, :id => settings[:id] + "_target", :class => "context_target drop_target")
     header.html_safe
   end
 
@@ -569,7 +570,7 @@ module TodosHelper
   end
 
   def context_container_id(todo)
-    return "c#{todo.context_id}"
+    return "context_#{todo.context_id}"
   end
 
   def todo_container_id(todo)

@@ -1,5 +1,5 @@
 class Project < ApplicationRecord
-  has_many :todos, -> {order("todos.due IS NULL, todos.due ASC, todos.created_at ASC")}, dependent: :delete_all
+  has_many :todos, -> {order(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC"))}, dependent: :delete_all
   has_many :notes, -> {order "created_at DESC"}, dependent: :delete_all
   has_many :recurring_todos
 
@@ -103,7 +103,7 @@ class Project < ApplicationRecord
   def stalled?
     # Stalled projects are active projects with no active next actions
     return false if self.completed? || self.hidden?
-    return self.todos.deferred_or_blocked.empty? && self.todos.active.empty?
+    return !self.todos.deferred_or_blocked.exists? && !self.todos.active.exists?
   end
 
   def shortened_name(length=40)

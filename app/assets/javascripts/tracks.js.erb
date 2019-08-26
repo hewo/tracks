@@ -28,6 +28,7 @@ var TracksForm = {
     },
     set_project_name_and_default_project_name: function (name) {
         $('input#todo_project_name').val(name);
+        $('input#multi_todo_project_name').val(name);
         $('#default_project_name_id').val(name);
     },
     set_tag_list_and_default_tag_list: function (name) {
@@ -648,7 +649,7 @@ var ContextListPage = {
         }
     },
     save_context_name: function(value, settings) {
-        var context_id = $(this).parents('.container.context').get(0).id.split('c')[1];
+        var context_id = $(this).parents('.container.context').get(0).id.split('_')[1];
         var highlight = function(){
             $('div.context span#context_name').effect('highlight', {}, 500);
         };
@@ -1084,7 +1085,7 @@ function update_order(event, ui){
 
 function set_defaults(defaults, field, input_name) {
   if(defaults[field.val()] !== undefined) {
-    var input = field.parents(".edit_todo_form").find('input[name='+input_name+']');
+    var input = field.parents("form").find('input[name='+input_name+']');
     if(input.attr('edited') === undefined) {
       input.val(defaults[field.val()]);
     }

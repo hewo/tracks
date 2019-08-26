@@ -28,7 +28,7 @@ class User < ApplicationRecord
               end
               def update_positions(project_ids)
                 project_ids.each_with_index {|id, position|
-                  project = self.detect { |p| p.id == id.to_i }
+                  project = self.find_by(id: id.to_i)
                   raise I18n.t('models.user.error_project_not_associated', :project => id, :user => @user.id) if project.nil?
                   project.update_attribute(:position, position + 1)
                 }
@@ -94,6 +94,7 @@ class User < ApplicationRecord
               end
            end
 
+  has_many :tags, dependent: :delete_all
   has_many :notes, -> { order "created_at DESC" }, dependent: :delete_all
   has_one :preference, dependent: :destroy
   has_many :attachments, through: :todos
