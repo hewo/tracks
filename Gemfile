@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 5.2.4'
 gem 'sass-rails', '~> 5.0'
-gem 'coffee-rails', '~> 4.2.0'
+gem 'coffee-rails', '~> 5.0.0'
 
 #gem 'json'
 
@@ -25,22 +25,22 @@ gem 'jquery-ui-rails' , '~>5.0.5'
 # always possible on all platforms
 # Alternatively use --without <group> arguments to bundler to not install that group
 gem "sqlite3", group: :sqlite
-gem "mysql2", "~> 0.5.2", group: :mysql
+gem "mysql2", "~> 0.5.3", group: :mysql
 
 gem "RedCloth"
-gem "sanitize", "~> 5.0"
+gem "sanitize", "~> 5.1"
 gem "will_paginate"
 gem "acts_as_list"
 gem "aasm", '~> 3.4.0'
 gem "htmlentities"
 gem "rails_autolink"
-gem 'puma', '~> 4.0'
+gem 'puma', '~> 4.3'
 gem 'paperclip'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.13'
 
-gem 'chartjs-ror'
+gem 'chartjs-ror', :git => 'git://github.com/ZeiP/chartjs-ror.git'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'
@@ -55,16 +55,17 @@ group :development do
   gem "spring"
   gem "yard"
 
-  gem 'tolk', '~> 3.1.0'
+  gem 'tolk', '~> 3.2.1'
 
   gem "bullet"
   gem "rack-mini-profiler"
+  gem "solargraph"
 end
 
 group :development, :test do
   gem 'byebug'
   gem 'listen'
-  gem "rubocop", "~> 0.72", require: false
+  gem "rubocop", "~> 0.80", require: false
 end
 
 group :test do

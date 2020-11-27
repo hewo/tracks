@@ -1,32 +1,46 @@
-development:
-  adapter: mysql2
-  database: tracks
-  # set this if you are storing utf8 in your mysql database to handle strings
-  # like "Réné". Not needed for sqlite. For PostgreSQL use encoding: unicode
-  # encoding: utf8
-  host: db
-  username: root
-  password:
+# development:
+#   adapter: mysql2
+#   database: tracks
+#   # set this if you are storing utf8 in your mysql database to handle strings
+#   # like "Réné". Not needed for sqlite. For PostgreSQL use encoding: unicode
+#   # encoding: utf8
+#   host: localhost
+#   username: tracks
+#   password: tracks-123-abc-def
+# 
+# production:
+#   adapter: mysql2
+#   database: tracks
+#   # set this if you are storing utf8 in your mysql database to handle strings
+#   # like "Réné".Not needed for sqlite. For PostgreSQL use encoding: unicode
+#   # encoding: utf8
+#   host: localhost
+#   username: tracks
+#   password: tracks-123-abc-def
 
-test:
+# The following is an example to configure Tracks to use sqlite
+
+development:
+  adapter: sqlite3
+  database: db/tracks-20-blank.sqlite3.db
+  pool: 5
+  timeout: 5000
+
+production:
+  adapter: sqlite3
+  database: db/tracks-20-blank.sqlite3.db
+  pool: 5
+  timeout: 5000
+
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test: &TEST
   adapter: mysql2
   database: tracks_test
-  # set this if you are storing utf8 in your mysql database to handle strings
-  # like "Réné". Not needed for sqlite. For PostgreSQL use encoding: unicode
-  # encoding: utf8
-  host: db
   username: root
-  password:
+  encoding: utf8
 
-# Production config is disabled by default
-#
-# production:
-#  adapter: mysql2
-#  database: tracks
-#  # set this if you are storing utf8 in your mysql database to handle strings
-#  # like "Réné".Not needed for sqlite. For PostgreSQL use encoding: unicode
-#  # encoding: utf8
-#  host: localhost
-#  username: root
-#  password:
-
+cucumber:
+  <<: *TEST
