@@ -14,7 +14,7 @@ div.depends_on label {
     float: left;
 }
 
-div#input_box div#todo_new_action_container div#todo_multi_add form#todo-form-multi-new-action.inline-form label {
+div#input_box div#todo_multi_add form#todo-form-multi-new-action.inline-form label {
     float: center;
 }
 
@@ -75,15 +75,15 @@ p {
 }
 
 a, a:link, a:active, a:visited {
-    color: #cc3334;
+    color: $link-color;
     text-decoration: none;
     padding-left: 1px;
     padding-right: 1px;
 }
 
 a:hover {
-    color: #fff;
-    background-color: #cc3334;
+    color: $link-hover-color;
+    background-color: $link-bgcolor;
 }
 
 h1 {
@@ -820,12 +820,14 @@ form {
 }
 
 #todo_new_action_container, #project_new_project_container, #context_new_container, #recurring_new_container {
-    background: #ddd;
     width: 270px;
     padding: 5px 10px;
-    background-color: #000;
-    color: #eee;
+    background-color: $brand-primary;
+    color: $gray-lighter;
     border-radius: 5px;
+    a {
+        color: $box-tablink-color;
+    }
 }
 
 #recurring_new_container img {
@@ -900,10 +902,12 @@ input#go_to_project, input#context_hide {
     text-align:right;
 }
 
-#todo-form-new-action label, .edit_todo_form label {
+.edit_todo_form label {
     display: block;
     padding-bottom: 3px;
 }
+
+
 
 form.button-to {
     border: none;
@@ -1347,10 +1351,6 @@ div.auto_complete {
     }
 }
 
-.ui-datepicker {
-    z-index: 1000 !important;
-}
-
 .ui-autocomplete-loading {
     background: white image-url('ui-anim_basic_16x16.gif') right center no-repeat;
 }
@@ -1383,4 +1383,8 @@ ul.todo-submenu > li > a {
     &.icon_item_to_project {
         background: image-url('to_project_off.png') no-repeat;
     }
+}
+
+.recurring_todos .ui-dialog .ui-dialog-title {
+  float: inherit;
 }

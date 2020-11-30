@@ -1,23 +1,27 @@
 class UsersController < ApplicationController
-
-  before_action :admin_login_required, :only => [ :index, :show, :destroy ]
-  skip_before_action :login_required, :only => [ :new, :create ]
-  prepend_before_action :login_optional, :only => [ :new, :create ]
+  before_action :admin_login_required, :only => [:index, :show]
+  before_action :admin_or_self_login_required, :only => [:destroy]
+  skip_before_action :login_required, :only => [:new, :create]
+  prepend_before_action :login_optional, :only => [:new, :create]
 
   # GET /users GET /users.xml
   def index
     respond_to do |format|
+      order_by = 'login'
+      if params[:order] && User.column_names.include?(params[:order])
+        order_by = params[:order]
+      end
       format.html do
-        @page_title = "TRACKS::Manage Users"
-        @users = User.order('login ASC').paginate :page => params[:page]
+        @page_title = t('users.manage_users_title')
+        @users = User.order(order_by + ' ASC').paginate :page => params[:page]
         @total_users = User.count
         # When we call users/signup from the admin page we store the URL so that
         # we get returned here when signup is successful
         store_location
       end
       format.xml do
-        @users  = User.order('login')
-        render :xml => @users.to_xml(:root => :users, :except => [ :password ])
+        @users = User.order(order_by)
+        render :xml => @users.to_xml(:root => :users, :except => [:password])
       end
     end
   end
@@ -25,16 +29,16 @@ class UsersController < ApplicationController
   # GET /users/id GET /users/id.xml
   def show
     @user = User.find(params[:id])
-    render :xml => @user.to_xml(:root => :user, :except => [ :password ])
+    render :xml => @user.to_xml(:root => :user, :except => [:password])
   end
 
   # GET /users/new
   def new
     @auth_types = []
     unless session[:cas_user]
-      Tracks::Config.auth_schemes.each {|auth| @auth_types << [auth,auth]}
+      Tracks::Config.auth_schemes.each { |auth| @auth_types << [auth, auth] }
     else
-      @auth_types << ['cas','cas']
+      @auth_types << ['cas', 'cas']
     end
 
     if User.no_users_yet?
@@ -76,10 +80,14 @@ class UsersController < ApplicationController
           return
         end
 
+        unless params['approve_tos'] == 'on' || SITE_CONFIG['tos_link'].blank?
+          render_failure "You have to accept the terms of service to sign up!"
+          return
+        end
+
         user = User.new(user_params)
 
         unless user.valid?
-          session['new_user'] = user
           redirect_to signup_path
           return
         end
@@ -89,7 +97,7 @@ class UsersController < ApplicationController
         user.is_admin = true if first_user_signing_up
         if user.save
           @user = User.authenticate(user.login, params['user']['password'])
-          @user.create_preference({:locale => I18n.locale})
+          @user.create_preference({ :locale => I18n.locale })
           @user.save
           session['user_id'] = @user.id unless signup_by_admin
           notify :notice, t('users.signup_successful', :username => @user.login)
@@ -99,13 +107,18 @@ class UsersController < ApplicationController
       end
       format.xml do
         unless current_user && current_user.is_admin
-          render :body => "401 Unauthorized: Only admin users are allowed access to this function.", :status => 401
+          render :body => t('errors.user_unauthorized'), :status => 401
           return
         end
         unless check_create_user_params
           render_failure "Expected post format is valid xml like so: <user><login>username</login><password>abc123</password></user>.", 400
           return
         end
+        unless user_params['approve_tos'] == 'on' || SITE_CONFIG['tos_link'].blank?
+          render_failure "You have to accept the terms of service to sign up!"
+          return
+        end
+
         user = User.new(user_params)
         user.password_confirmation = user_params[:password]
         saved = user.save
@@ -122,8 +135,14 @@ class UsersController < ApplicationController
   # DELETE /users/id DELETE /users/id.xml
   def destroy
     @deleted_user = User.find(params[:id])
+
+    # Remove the user
     @saved = @deleted_user.destroy
-    @total_users = User.count
+
+    # Log out the user if they've deleted their own user and it succeeded.
+    if @saved && current_user == @deleted_user
+      logout_user
+    end
 
     respond_to do |format|
       format.html do
@@ -132,10 +151,18 @@ class UsersController < ApplicationController
         else
           notify :error, t('users.failed_to_delete_user', :username => @deleted_user.login)
         end
-        redirect_to users_url
+        if current_user == @deleted_user
+          redirect_to login
+        else
+          redirect_to users_url
+        end
       end
-      format.js
-      format.xml { head :ok }
+      format.js do
+        @total_users = User.count
+      end
+      format.xml do
+        head :ok
+      end
     end
   end
 
@@ -178,7 +205,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:login, :first_name, :last_name, :password_confirmation, :password, :auth_type, :open_id_url)
+    params.require(:user).permit(:login, :first_name, :last_name, :email, :password_confirmation, :password, :auth_type, :open_id_url)
   end
 
   def get_new_user
@@ -199,5 +226,4 @@ class UsersController < ApplicationController
     return false if params[:user][:password].empty?
     return true
   end
-
 end

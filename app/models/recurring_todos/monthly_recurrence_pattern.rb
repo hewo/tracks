@@ -1,7 +1,5 @@
 module RecurringTodos
-
   class MonthlyRecurrencePattern < AbstractRecurrencePattern
-
     def initialize(user)
       super user
     end
@@ -34,7 +32,7 @@ module RecurringTodos
       get(:recurrence_selector) == 1 ? get(:every_other2) : 1
     end
 
-    def every_xth_day(default=nil)
+    def every_xth_day(default = nil)
       get(:every_other3) || default
     end
 

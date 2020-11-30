@@ -128,17 +128,17 @@ class TodosControllerTest < ActionController::TestCase
 
     get :tag, params: { name: 'first.last.m' }
     assert_equal "text/html", request.format, "controller should set right content type"
-    assert_equal "text/html", @response.content_type
+    assert_equal "text/html", @response.media_type
     assert_equal "first.last", assigns['tag_name'], ".m should be chomped"
 
     get :tag, params: { name: 'first.last.txt' }
     assert_equal "text/plain", request.format, "controller should set right content type"
-    assert_equal "text/plain", @response.content_type
+    assert_equal "text/plain", @response.media_type
     assert_equal "first.last", assigns['tag_name'], ".txt should be chomped"
 
     get :tag, params: { name: 'first.last' }
     assert_equal "text/html", request.format, "controller should set right content type"
-    assert_equal "text/html", @response.content_type
+    assert_equal "text/html", @response.media_type
     assert_equal "first.last", assigns['tag_name'], ":name should be correct"
   end
 
@@ -223,14 +223,33 @@ class TodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
     assert_difference 'Todo.count' do
       put :create, xhr: true, params: {
-        "context_name"=>"library",
-        "project_name"=>"Build a working time machine",
+        "context_name" => "library",
+        "project_name" => "Build a working time machine",
         "todo" => {
-          "notes"=>"",
+          "notes" => "",
           "description" => "Call Warren Buffet to find out how much he makes per day",
-          "due"=>"30/11/2006"
+          "due" => "30/11/2006"
         },
-        "tag_list"=>"foo bar"
+        "tag_list" => "foo bar"
+      }
+      assert_response 200
+    end
+  end
+
+  def test_create_todo_via_xhr_context_view
+    login_as(:admin_user)
+    assert_difference 'Todo.count' do
+      put :create, xhr: true, params: {
+        "context_name" => "library",
+        "project_name" => "",
+        "todo" => {
+          "notes" => "",
+          "description" => "Read Warren Buffet's book",
+          "due" => "30/12/2006"
+        },
+        "_source_view" => "context",
+        "default_context_name" => "library",
+        "tag_list" => "bar foo"
       }
       assert_response 200
     end
@@ -421,6 +440,14 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal context.id, todo.reload.context.id, 'context of todo should be changed'
   end
 
+  def test_update_todo_due_in_calendar_view
+    t = Todo.find(1)
+    login_as(:admin_user)
+    post :update, xhr: true, params: { :id => 1, :_source_view => 'calendar', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"31/11/2006"}, "tag_list"=>"foo bar" }
+    t = Todo.find(1)
+    assert_response 200
+  end
+
   #######
   # defer
   #######
@@ -479,8 +506,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_rss_feed_not_completed
     login_as(:admin_user)
     get :index, params: { :format => "rss" }
-    assert_equal 'application/rss+xml', @response.content_type
-    # puts @response.body
+    assert_equal 'application/rss+xml', @response.media_type
 
     assert_select 'rss[version="2.0"]' do
       assert_select 'channel' do
@@ -502,7 +528,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_atom_feed_not_completed
     login_as :admin_user
     get :index, params: { :format => "atom" }
-    assert_equal 'application/atom+xml', @response.content_type
+    assert_equal 'application/atom+xml', @response.media_type
     assert_equal 'http://www.w3.org/2005/Atom', html_document.children[0].namespace.href
     assert_select 'feed' do
       assert_select '>title', 'Tracks Actions'
@@ -518,7 +544,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_text_feed_not_completed
     login_as(:admin_user)
     get :index, params: { :format => "txt" }
-    assert_equal 'text/plain', @response.content_type
+    assert_equal 'text/plain', @response.media_type
     assert !(/&nbsp;/.match(@response.body))
     assert_number_of_items_in_text_feed 11
   end
@@ -526,7 +552,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_ical_feed_not_completed
     login_as :admin_user
     get :index, params: { :format => "ics" }
-    assert_equal 'text/calendar', @response.content_type
+    assert_equal 'text/calendar', @response.media_type
     assert !(/&nbsp;/.match(@response.body))
     assert_number_of_items_in_ical_feed 11
   end
@@ -756,7 +782,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_mobile_index_uses_text_html_content_type
     login_as(:admin_user)
     get :index, params: { :format => "m" }
-    assert_equal 'text/html', @response.content_type
+    assert_equal 'text/html', @response.media_type
   end
 
   def test_mobile_index_assigns_down_count
@@ -996,7 +1022,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_format_note
     login_as(:admin_user)
-    todo = users(:admin_user).todos.first
+    todo = users(:admin_user).todos.where("state='active'").first
     todo.notes = "Normal *bold* http://foo.bar/baz"
     todo.save!
     get :index

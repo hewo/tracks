@@ -1,4 +1,67 @@
-## Version 2.4
+See doc/upgrading.md for the upgrade documentation!
+
+## Version 2.5.1
+
+### Security issue disclosure
+
+Joe Thorpe from Secarma disclosed an XSS issue that was inadvertently
+fixed in 2.5.0 by another bug fix. Tracks previously rendered XSS content
+in the user's own data. The content is only shown to the user themself,
+which mitigates the vulnerability in the normal use case where a single
+user account is only used by one person. The CVSS rating for self-XSS is
+debatable and thus is not published for this issue.
+
+I want to thank Joe for reporting the issue and for the insightful discussion
+regarding the issue. Thanks to the disclosure there is now also a written
+security policy for the project.
+
+### Bug fixes
+
+* Editing a due date in the calendar view fixed
+* Adding actions in the context view fixed
+* Fixed the recurring todo UI
+
+## Version 2.5.0
+
+### New features
+* Updated documentation both in the doc directory and online.
+* .skip-docker file has been replaced with .use-docker, see upgrading.md for
+  details.
+* Added email, last login, creation and update time to the user model.
+* Added terms of service and email fields to the signup form. The TOS link is
+  defined in site.yml, see config/site.yml.tmpl.
+* New, lighter default color scheme. The black color scheme is also available
+  for selection in the user preferences. Default theme can be set in site.yml.
+* Added a help page to the ? menu linking to online help assets.
+* Allow the user to remove their own account.
+
+### Removed features
+* Ruby versions below 2.5 are no longer supported.
+* Old Internet Explorer versions (7 and 8) are no longer supported.
+
+### Bug fixes
+* Fixed the signup form to use login form styles.
+* Lots of dependencies have been upgraded, including Rails major upgrade.
+* Fixed some minor UI bugs.
+
+## Version 2.4.2
+
+### New features
+* The new todo UI form has been updated.
+
+### Bug fixes
+* Needless sanitization of tags has been removed.
+* Security vulnerabilities have been fixed.
+
+## Version 2.4.1
+
+### Bug fixes
+* Fixed a bug in the tag migration that prevented the migration from completing
+  at least in some MySQL environments. The bug only affected upgrading an existing Tracks
+  installation.
+
+## Version 2.4.0
+
 ### New features
 * Removed support for deprecated password-hashing algorithm. This
   eliminates config.salt. Note the addition of a pre-upgrade step to
@@ -9,9 +72,9 @@
 * All REST APIs now also accept user token as password.
 * The stats view now uses Charts.js instead of the Flash-based chart library.
 * A Docker environment is used unless the .skip-docker file exists.
-* Rails 4.2
+* Rails 5.2
 * Thin replaces WEBrick as the included web server
-* Tracks is tested on Ruby 1.9.3, 2.0.0, 2.1, and 2.2.
+* Tracks is tested on Ruby 2.4 and 2.5
 * The MessageGateway will save the received email as an attachement to the todo
 * Add a configuration option for serving static assets from Rails
 

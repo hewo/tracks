@@ -1,7 +1,6 @@
 require_dependency "user"
 
 module LoginSystem
-
   def current_user
     get_current_user
   end
@@ -13,11 +12,11 @@ module LoginSystem
   # Logout the {#current_user} and redirect to login page
   #
   # @param [String] message notification to display
-  def logout_user message=t('login.logged_out')
+  def logout_user(message=t('login.logged_out'))
     @user.forget_me if logged_in?
     cookies.delete :auth_token
     session['user_id'] = nil
-    if ( SITE_CONFIG['authentication_schemes'].include? 'cas')  && session[:cas_user]
+    if SITE_CONFIG['authentication_schemes'].include?('cas') && session[:cas_user]
       CASClient::Frameworks::Rails::Filter.logout(self)
     else
       reset_session
@@ -37,7 +36,7 @@ module LoginSystem
   #    user.login != "bob"
   #  end
   def authorize?(user)
-     true
+    true
   end
 
   # overwrite this method if you only want to protect certain actions of the controller
@@ -79,7 +78,7 @@ module LoginSystem
       end
       # Allow also login based on auth data
       auth = get_basic_auth_data
-      if user = User.where(:login => auth[:user], :token => auth[:pass]).first
+      if (user = User.where(:login => auth[:user], :token => auth[:pass]).first)
         set_current_user(user)
         return true
       end
@@ -97,19 +96,18 @@ module LoginSystem
   #   def authorize?(user)
   #
   def login_required
-
     if not protect?(action_name)
       return true
     end
 
     login_from_cookie
 
-    if session['user_id'] and authorize?(get_current_user)
+    if session['user_id'] && authorize?(get_current_user)
       return true
     end
 
     auth = get_basic_auth_data
-    if user = User.authenticate(auth[:user], auth[:pass])
+    if (user = User.authenticate(auth[:user], auth[:pass]))
       session['user_id'] = user.id
       set_current_user(user)
       return true
@@ -125,15 +123,14 @@ module LoginSystem
   end
 
   def login_optional
-
     login_from_cookie
 
-    if session['user_id'] and authorize?(get_current_user)
+    if session['user_id'] && authorize?(get_current_user)
       return true
     end
 
     auth = get_basic_auth_data
-    if user = User.authenticate(auth[:user], auth[:pass])
+    if (user = User.authenticate(auth[:user], auth[:pass]))
       session['user_id'] = user.id
       set_current_user(user)
       return true
@@ -155,6 +152,7 @@ module LoginSystem
 
   def set_current_user(user)
     @user = user
+    User.update(@user.id, last_login_at: Time.zone.now)
   end
 
   # overwrite if you want to have special behavior in case the user is not authorized
@@ -189,7 +187,6 @@ module LoginSystem
 
   # HTTP Basic auth code adapted from Coda Hale's simple_http_auth plugin. Thanks, Coda!
   def get_basic_auth_data
-
     auth_locations = ['REDIRECT_REDIRECT_X_HTTP_AUTHORIZATION',
                       'REDIRECT_X_HTTP_AUTHORIZATION',
                       'X-HTTP_AUTHORIZATION', 'HTTP_AUTHORIZATION']
@@ -200,7 +197,7 @@ module LoginSystem
         authdata = request.env[location].to_s.split
       end
     end
-    if authdata and authdata[0] == 'Basic'
+    if authdata && authdata[0] == 'Basic'
       data = Base64.decode64(authdata[1]).split(':')[0..1]
       {
         user: data[0],
@@ -216,14 +213,14 @@ module LoginSystem
       render :body => t('login.unsuccessful'), :status => 401
   end
 
-private
+  private
 
   # Redirect the user to the login page.
   def redirect_to_login
     respond_to do |format|
       format.html { redirect_to login_path }
+      format.js { render js: "redirect_to('" + login_path + "')" }
       format.m { redirect_to login_path(:format => 'm') }
     end
   end
-
 end

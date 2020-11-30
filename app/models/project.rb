@@ -1,6 +1,6 @@
 class Project < ApplicationRecord
-  has_many :todos, -> {order(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC"))}, dependent: :delete_all
-  has_many :notes, -> {order "created_at DESC"}, dependent: :delete_all
+  has_many :todos, -> { order(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC")) }, dependent: :delete_all
+  has_many :notes, -> { order "created_at DESC" }, dependent: :delete_all
   has_many :recurring_todos
 
   belongs_to :default_context, :class_name => "Context", :foreign_key => "default_context_id"
@@ -11,21 +11,20 @@ class Project < ApplicationRecord
   scope :completed,   -> { where state: 'completed' }
   scope :uncompleted, -> { where("NOT(state = ?)", 'completed') }
 
-  scope :with_name_or_description, lambda { |body| where("name LIKE ? OR description LIKE ?", body, body) }
-  scope :with_namepart, lambda { |body| where("name LIKE ?", body + '%') }
+  scope :with_name_or_description, lambda { |body| where("name " + Common.like_operator + " ? OR description " + Common.like_operator + " ?", body, body) }
+  scope :with_namepart, lambda { |body| where("name " + Common.like_operator + " ?", body + '%') }
 
   before_create :set_last_reviewed_now
 
   validates_presence_of :name
   validates_length_of :name, :maximum => 255
-  validates_uniqueness_of :name, :scope => "user_id"
+  validates_uniqueness_of :name, :scope => "user_id", :case_sensitive => true
 
   acts_as_list :scope => 'user_id = #{user_id} AND state = \'#{state}\'', :top_of_list => 0
 
   include AASM
 
   aasm :column => :state do
-
     state :active, :initial => true
     state :hidden
     state :completed, :enter => :set_completed_at_date, :exit => :clear_completed_at_date
@@ -50,7 +49,7 @@ class Project < ApplicationRecord
   end
 
   def set_last_reviewed_now
-    self.last_reviewed = Time.now
+    self.last_reviewed = Time.zone.now
   end
 
   def set_completed_at_date
@@ -106,7 +105,7 @@ class Project < ApplicationRecord
     return !self.todos.deferred_or_blocked.exists? && !self.todos.active.exists?
   end
 
-  def shortened_name(length=40)
+  def shortened_name(length = 40)
     name.truncate(length, :omission => "...").html_safe
   end
 
@@ -145,11 +144,9 @@ class Project < ApplicationRecord
     end
     count
   end
-
 end
 
 class NullProject
-
   def hidden?
     false
   end
@@ -169,5 +166,4 @@ class NullProject
   def persisted?
     false
   end
-
 end

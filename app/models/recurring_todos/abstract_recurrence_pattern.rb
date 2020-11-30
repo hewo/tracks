@@ -1,7 +1,5 @@
 module RecurringTodos
-
   class AbstractRecurrencePattern
-
     attr_accessor :attributes
 
     def initialize(user)
@@ -46,9 +44,13 @@ module RecurringTodos
 
     def xth(x)
       xth_day = [
-        I18n.t('todos.recurrence.pattern.first'),I18n.t('todos.recurrence.pattern.second'),I18n.t('todos.recurrence.pattern.third'),
-        I18n.t('todos.recurrence.pattern.fourth'),I18n.t('todos.recurrence.pattern.last')]
-      x.nil? ? '??' : xth_day[x-1]
+        I18n.t('todos.recurrence.pattern.first'),
+        I18n.t('todos.recurrence.pattern.second'),
+        I18n.t('todos.recurrence.pattern.third'),
+        I18n.t('todos.recurrence.pattern.fourth'),
+        I18n.t('todos.recurrence.pattern.last'),
+      ]
+      x.nil? ? '??' : xth_day[x - 1]
     end
 
     def day_of_week_as_text(day)
@@ -147,7 +149,7 @@ module RecurringTodos
 
     # checks if the next todos should be put in the tickler for recurrence_target == 'due_date'
     def put_in_tickler?
-      !( show_always? || show_from_delta.nil?)
+      !(show_always? || show_from_delta.nil?)
     end
 
     def get_next_date(previous)
@@ -172,7 +174,7 @@ module RecurringTodos
     # takes start_from and previous into account.
     # offset needs to be 1.day for daily patterns or the start will be the
     # same day as the previous
-    def determine_start(previous, offset=0.day)
+    def determine_start(previous, offset = 0.day)
       start = self.start_from || NullTime.new
       if previous
         # check if the start_from date is later than previous. If so, use
@@ -207,14 +209,14 @@ module RecurringTodos
     end
 
     def find_xth_day_of_month(x, weekday, month, year)
-      start = Time.zone.local(year,month,1)
+      start = Time.zone.local(year, month, 1)
       n = x
       while n > 0
         while start.wday() != weekday
           start += 1.day
         end
         n -= 1
-        start += 1.day unless n==0
+        start += 1.day unless n == 0
       end
       start
     end

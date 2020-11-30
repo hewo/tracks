@@ -89,6 +89,19 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  def test_validate_correct_email
+    assert_difference 'User.count' do
+      create_user :email=> 'testi@example.org'
+    end
+  end
+
+  def test_validate_email_format
+    assert_no_difference 'User.count' do
+      u = create_user :email=> 'test'
+      assert_equal ["is not valid"], u.errors[:email]
+    end
+  end
+
   def test_display_name_with_first_and_last_name_set
     @other_user.first_name = "Jane"
     @other_user.last_name = "Doe"
@@ -261,12 +274,12 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_should_reset_password
-    users(:other_user).update_attributes(:password => 'new password', :password_confirmation => 'new password')
+    users(:other_user).update(:password => 'new password', :password_confirmation => 'new password')
     assert_equal users(:other_user), User.authenticate('jane', 'new password')
   end
 
   def test_should_not_rehash_password
-    users(:other_user).update_attributes(:login => 'jane2')
+    users(:other_user).update(:login => 'jane2')
     assert_equal users(:other_user), User.authenticate('jane2', 'sesame')
   end
 
@@ -351,16 +364,16 @@ class UserTest < ActiveSupport::TestCase
 
     # test group counts for projects and contexts
     project_counts = u.todos.count_by_group(:project_id)
-    assert_equal [6,3,4,4], project_counts.values
+    assert_equal [6,3,4,4].sort, project_counts.values.sort
 
     context_counts = u.todos.count_by_group(:context_id)
-    assert_equal [7,3,1,3,1,2], context_counts.values
+    assert_equal [7,3,1,3,1,2].sort, context_counts.values.sort
 
     # add a todo to the first context and check that the count is increased
     u.todos.create!(:description => "yet another todo", :context => u.contexts.first)
 
     context_counts = u.todos.reload.count_by_group(:context_id)
-    assert_equal [8,3,1,3,1,2], context_counts.values
+    assert_equal [8,3,1,3,1,2].sort, context_counts.values.sort
   end
 
   def test_deleting_user_deletes_all_related_data

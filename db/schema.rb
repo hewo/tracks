@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_18_202817) do
+ActiveRecord::Schema.define(version: 2020_08_20_000743) do
 
   create_table "attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "todo_id"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 2019_06_18_202817) do
     t.integer "sms_context_id"
     t.string "locale"
     t.integer "review_period", default: 14, null: false
+    t.string "theme"
     t.index ["user_id"], name: "index_preferences_on_user_id"
   end
 
@@ -166,7 +167,7 @@ ActiveRecord::Schema.define(version: 2019_06_18_202817) do
   create_table "todos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "context_id", null: false
     t.integer "project_id"
-    t.string "description", null: false
+    t.text "description", null: false
     t.text "notes", limit: 16777215
     t.datetime "created_at"
     t.datetime "due"
@@ -220,6 +221,10 @@ ActiveRecord::Schema.define(version: 2019_06_18_202817) do
     t.string "open_id_url"
     t.string "remember_token"
     t.datetime "remember_token_expires_at"
+    t.string "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "last_login_at"
     t.index ["login"], name: "index_users_on_login"
   end
 

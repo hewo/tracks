@@ -1,18 +1,16 @@
 # These methods are adapted from has_many_polymorphs' tagging_extensions
-
 module IsTaggable
-
   def self.included(klass)
     klass.class_eval do
-
       # Add tags associations
       has_many :taggings, :as => :taggable
       has_many :tags, :through => :taggings do
         def to_s
           self.to_a.map(&:name).sort.join(Tag::JOIN_DELIMITER)
         end
+
         def all_except_starred
-          self.to_a.reject{|tag| tag.name == Todo::STARRED_TAG_NAME}
+          self.to_a.reject { |tag| tag.name == Todo::STARRED_TAG_NAME }
         end
       end
 
@@ -40,7 +38,7 @@ module IsTaggable
       end
 
       def has_tag?(tag_name)
-        return tags.any? {|tag| tag.name == tag_name}
+        return tags.any? { |tag| tag.name == tag_name }
       end
 
       # Add tags to <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
@@ -64,7 +62,7 @@ module IsTaggable
       # Removes tags from <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
       def _remove_tags(outgoing)
         outgoing = tag_cast_to_string(outgoing)
-        tags.destroy(*(self.user.tags.select{|tag| outgoing.include? tag.name}))
+        tags.destroy(*(self.user.tags.select { |tag| outgoing.include? tag.name }))
       end
 
       def get_tag_name_from_item(item)

@@ -1,5 +1,4 @@
 class PreferencesController < ApplicationController
-
   def index
     @page_title = t('preferences.page_title')
     @prefs = current_user.prefs
@@ -9,8 +8,8 @@ class PreferencesController < ApplicationController
   def update
     @prefs = current_user.prefs
     @user = current_user
-    user_updated = current_user.update_attributes(user_params)
-    prefs_updated = current_user.preference.update_attributes(prefs_params)
+    user_updated = current_user.update(user_params)
+    prefs_updated = current_user.preference.update(prefs_params)
     if (user_updated && prefs_updated)
       if params['user']['password'].present? # password updated?
         logout_user t('preferences.password_changed')
@@ -31,7 +30,7 @@ class PreferencesController < ApplicationController
     render :body => l(Date.current, :format => format)
   end
 
-private
+  private
 
   def prefs_params
     params.require(:prefs).permit(
@@ -40,11 +39,11 @@ private
       :staleness_starts, :due_style, :locale, :title_date_format, :time_zone,
       :show_hidden_projects_in_sidebar, :show_project_on_todo_done,
       :review_period, :refresh, :verbose_action_descriptors,
-      :mobile_todos_per_page, :sms_email, :sms_context_id)
+      :mobile_todos_per_page, :sms_email, :sms_context_id, :theme)
   end
 
   def user_params
-    params.require(:user).permit(:login, :first_name, :last_name, :password_confirmation, :password, :auth_type, :open_id_url)
+    params.require(:user).permit(:login, :first_name, :last_name, :email, :password_confirmation, :password, :auth_type, :open_id_url)
   end
 
   # Display notification if preferences are successful updated
@@ -52,5 +51,4 @@ private
     notify :notice, t('preferences.updated')
     redirect_to :action => 'index'
   end
-
 end

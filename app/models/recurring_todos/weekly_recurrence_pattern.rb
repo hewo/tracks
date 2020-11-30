@@ -1,7 +1,5 @@
 module RecurringTodos
-
   class WeeklyRecurrencePattern < AbstractRecurrencePattern
-
     def initialize(user)
       super user
     end
@@ -31,7 +29,7 @@ module RecurringTodos
     def validate
       super
       validate_not_blank(every_x_week, "Every other nth week may not be empty for weekly recurrence setting")
-      something_set = %w{sunday monday tuesday wednesday thursday friday saturday}.inject(false) { |set, day| set || self.send("on_#{day}") }
+      something_set = %w{ sunday monday tuesday wednesday thursday friday saturday }.inject(false) { |set, day| set || self.send("on_#{day}") }
       errors[:base] << "You must specify at least one day on which the todo recurs" unless something_set
     end
 
@@ -43,7 +41,7 @@ module RecurringTodos
 
       # we did not find anything this week, so check the nth next, starting from
       # sunday
-      start = start + self.every_x_week.week - (start.wday()).days
+      start = start + self.every_x_week.week - (start.wday).days
 
       start = find_first_day_in_this_week(start)
       return start unless start == -1
@@ -58,10 +56,10 @@ module RecurringTodos
         return self.start_from || Time.zone.now
       else
         start = previous + 1.day
-        if start.wday() == 0
+        if start.wday == 0
           # we went to a new week, go to the nth next week and find first match
           # that week. Note that we already went into the next week, so -1
-          start += (every_x_week-1).week
+          start += (every_x_week - 1).week
         end
         unless self.start_from.nil?
           # check if the start_from date is later than previous. If so, use
@@ -74,13 +72,10 @@ module RecurringTodos
 
     def find_first_day_in_this_week(start)
       # check if there are any days left this week for the next todo
-      start.wday().upto 6 do |i|
-        return start + (i-start.wday()).days if on_xday(i)
+      start.wday.upto 6 do |i|
+        return start + (i - start.wday).days if on_xday(i)
       end
       -1
     end
-
-
   end
-
 end

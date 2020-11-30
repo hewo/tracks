@@ -1,7 +1,8 @@
 #!/bin/bash
+
 set -e
 
-docker_compose="docker-compose --file docker-compose.yml"
+docker_compose="docker-compose --file test-envs/docker-compose-$1-$2.yml"
 
 function cleanup() {
   $docker_compose down
@@ -12,22 +13,24 @@ function die() {
     exit 1
 }
 
-
 trap cleanup EXIT
 
 export RAILS_ENV=test
-export TRACKS_DB=tracks_test
-
-# Put a config/site.yml file in place since it's needed for operation
-cp config/site.yml.tmpl config/site.yml
+export DATABASE_NAME=tracks_test
 
 $docker_compose build
 $docker_compose up -d
 script/poll-for-db
 
 # Leaving this in since it will be needed for Rails 5
-bin/rails db:environment:set RAILS_ENV=test || true
+$docker_compose run web bin/rails db:environment:set RAILS_ENV=test || true
 
-bin/rake db:reset
-bin/rake test
+if [ "$2" == "mysql" ];
+then
+  $docker_compose run web bin/rake db:reset
+else
+  $docker_compose run web bin/rake db:migrate
+  $docker_compose run web bin/rake db:seed
+fi
+$docker_compose run web bin/rake test
 
