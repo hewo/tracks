@@ -13,7 +13,7 @@ module RenderingHelper
         # do not change string; URL is already linked
         href
       else
-        content_tag(:a, h(href), :href => URI.escape(href))
+        content_tag(:a, h(href), :href => href)
       end
     end
   end
@@ -21,13 +21,13 @@ module RenderingHelper
   def render_text(text)
     rendered = auto_link_message(text)
     rendered = textile(rendered)
-    rendered = auto_link(rendered, link: :urls, html: {target: '_blank'})
+    rendered = auto_link(rendered, link: :urls, html: { target: '_blank' })
 
     relaxed_config = Sanitize::Config::RELAXED
     config = relaxed_config
 
     # add onenote and message protocols, allow a target
-    a_href_config = relaxed_config[:protocols]['a']['href'] + %w(onenote message)
+    a_href_config = relaxed_config[:protocols]['a']['href'] + %w[onenote message obsidian]
     a_attributes = relaxed_config[:attributes]['a'] + ['target']
     config = Sanitize::Config.merge(config, protocols: { 'a' => { 'href' => a_href_config } }, :attributes => { 'a' => a_attributes })
 

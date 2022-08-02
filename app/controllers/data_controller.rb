@@ -2,39 +2,38 @@ class DataController < ApplicationController
   require 'csv'
 
   def index
-    @page_title = "TRACKS::Export"
+    @page_title = t('data.export.page_title')
   end
 
-  def import
-  end
+  def import; end
 
   def csv_map
     if params[:file].blank?
-      flash[:notice] = "File can't be blank"
-      redirect_to :back
+      flash[:notice] = t "data.import.errors.file_blank"
+      redirect_back fallback_location: root_path
     else
       @import_to = params[:import_to]
 
       begin
-        #get column headers and format as [['name', column_number]...]
+        # Get column headers and format as [['name', column_number]...]
         i = -1
-        @headers = import_headers(params[:file].path).collect { |v| [v, i+=1] }
-        @headers.unshift ['',i]
+        @headers = import_headers(params[:file].path).collect { |v| [v, i += 1] }
+        @headers.unshift ['', i]
       rescue Exception => e
-        flash[:error] = "Invalid CVS: could not read headers: #{e}"
-        redirect_to :back
+        flash[:error] = t "data.import.errors.invalid_csv", e: e
+        redirect_back fallback_location: root_path
         return
       end
 
-      #save file for later
+      # Save file for later
       begin
         uploaded_file = params[:file]
         @filename = sanitize_filename(uploaded_file.original_filename)
         path_and_file = Rails.root.join('public', 'uploads', 'csv', @filename)
         File.open(path_and_file, "wb") { |f| f.write(uploaded_file.read) }
       rescue Exception => e
-        flash[:error] = "Could not save uploaded CSV (#{path_and_file}). Can Tracks write to the upload directory? #{e}"
-        redirect_to :back
+        flash[:error] = t "data.import.errors.save_error", path_and_file: path_and_file, e: e
+        redirect_back fallback_location: root_path
         return
       end
 
@@ -44,8 +43,8 @@ class DataController < ApplicationController
       when 'todos'
         @labels = [:description, :context, :project, :notes, :created_at, :due, :completed_at]
       else
-        flash[:error] = "Invalid import destination"
-        redirect_to :back
+        flash[:error] = t "data.import.errors.invalid_destination"
+        redirect_back fallback_location: root_path
       end
       respond_to do |format|
         format.html
@@ -60,15 +59,19 @@ class DataController < ApplicationController
       case params[:import_to]
       when 'projects'
         count = Project.import path_and_file, params, current_user
-        flash[:notice] = "#{count} Projects imported"
+        flash[:notice] = t 'data.import.projects_count', count: count
       when 'todos'
         count = Todo.import path_and_file, params, current_user
-        flash[:notice] = "#{count} Todos imported"
+        if !count
+          flash[:error] = t('data.import.errors.no_context')
+        else
+          flash[:notice] = t 'data.import.todos_count', count: count
+        end
       else
-        flash[:error] = t('data.invalid_import_destination')
+        flash[:error] = t('data.import.errors.invalid_destination')
       end
     rescue Exception => e
-      flash[:error] = t('data.invalid_import_destination') + ": #{e}"
+      flash[:error] = t 'data.import.errors.invalid_destination', e: e
     end
     File.delete(path_and_file)
     redirect_to import_data_path
@@ -94,17 +97,17 @@ class DataController < ApplicationController
     all_tables['projects'] = current_user.projects.load
 
     todo_tag_ids = Tag.find_by_sql([
-        "SELECT DISTINCT tags.id "+
-          "FROM tags, taggings, todos "+
-          "WHERE todos.user_id=? "+
-          "AND tags.id = taggings.tag_id " +
-          "AND taggings.taggable_id = todos.id ", current_user.id])
+        "SELECT DISTINCT tags.id
+         FROM tags, taggings, todos
+         WHERE todos.user_id = ?
+         AND tags.id = taggings.tag_id
+         AND taggings.taggable_id = todos.id", current_user.id])
     rec_todo_tag_ids = Tag.find_by_sql([
-        "SELECT DISTINCT tags.id "+
-          "FROM tags, taggings, recurring_todos "+
-          "WHERE recurring_todos.user_id=? "+
-          "AND tags.id = taggings.tag_id " +
-          "AND taggings.taggable_id = recurring_todos.id ", current_user.id])
+        "SELECT DISTINCT tags.id
+         FROM tags, taggings, recurring_todos
+         WHERE recurring_todos.user_id = ?
+         AND tags.id = taggings.tag_id
+         AND taggings.taggable_id = recurring_todos.id", current_user.id])
     tags = Tag.where("id IN (?) OR id IN (?)", todo_tag_ids, rec_todo_tag_ids)
     taggings = Tagging.where("tag_id IN (?) OR tag_id IN(?)", todo_tag_ids, rec_todo_tag_ids)
 
@@ -114,7 +117,8 @@ class DataController < ApplicationController
     all_tables['recurring_todos'] = current_user.recurring_todos.load
 
     result = all_tables.to_yaml
-    result.gsub!(/\n/, "\r\n")   # TODO: general functionality for line endings
+    # TODO: general functionality for line endings
+    result.gsub!(/\n/, "\r\n")
     send_data(result, :filename => "tracks_backup.yml", :type => 'text/plain')
   end
 
@@ -129,7 +133,7 @@ class DataController < ApplicationController
         csv << [todo.id, todo.context.name,
           todo.project_id.nil? ? "" : todo.project.name,
           todo.description,
-          todo.notes, todo.tags.collect{|t| t.name}.join(', '),
+          todo.notes, todo.tags.collect { |t| t.name }.join(', '),
           todo.created_at.to_formatted_s(:db),
           todo.due? ? todo.due.to_formatted_s(:db) : "",
           todo.completed_at? ? todo.completed_at.to_formatted_s(:db) : "",
@@ -163,17 +167,17 @@ class DataController < ApplicationController
 
   def xml_export
     todo_tag_ids = Tag.find_by_sql([
-        "SELECT DISTINCT tags.id "+
-          "FROM tags, taggings, todos "+
-          "WHERE todos.user_id=? "+
-          "AND tags.id = taggings.tag_id " +
-          "AND taggings.taggable_id = todos.id ", current_user.id])
+        "SELECT DISTINCT tags.id
+         FROM tags, taggings, todos
+         WHERE todos.user_id = ?
+         AND tags.id = taggings.tag_id
+         AND taggings.taggable_id = todos.id", current_user.id])
     rec_todo_tag_ids = Tag.find_by_sql([
-        "SELECT DISTINCT tags.id "+
-          "FROM tags, taggings, recurring_todos "+
-          "WHERE recurring_todos.user_id=? "+
-          "AND tags.id = taggings.tag_id " +
-          "AND taggings.taggable_id = recurring_todos.id ", current_user.id])
+        "SELECT DISTINCT tags.id
+         FROM tags, taggings, recurring_todos
+         WHERE recurring_todos.user_id = ?
+         AND tags.id = taggings.tag_id
+         AND taggings.taggable_id = recurring_todos.id", current_user.id])
     tags = Tag.where("id IN (?) OR id IN (?)", todo_tag_ids, rec_todo_tag_ids)
     taggings = Tagging.where("tag_id IN (?) OR tag_id IN(?)", todo_tag_ids, rec_todo_tag_ids)
 
@@ -195,7 +199,7 @@ class DataController < ApplicationController
 
   # adjusts time to utc
   def adjust_time(timestring)
-    if (timestring == '') or (timestring == nil)
+    if (timestring == '') || (timestring == nil)
       return nil
     else
       return Time.parse(timestring + 'UTC')
@@ -203,7 +207,7 @@ class DataController < ApplicationController
   end
 
   def yaml_import
-    raise "YAML loading is disabled"
+    raise t "data.import.yaml_disabled"
   end
 
   private

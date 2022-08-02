@@ -1,5 +1,49 @@
 See doc/upgrading.md for the upgrade documentation!
 
+## Version 2.6.0
+
+## New features
+
+* Ruby 3.0 is now supported.
+* Support obsidian links in notes.
+
+## Removed features
+
+* No longer supporting EOL Ruby 2.5
+
+### Bug fixes
+
+* Fix Docker image functionality in certain cases.
+* Lots of dependencies have been upgraded.
+* Fixed some error messages in import.
+* Fixed import in the Docker image.
+* Footer shows the Git version hash and date in the Docker image
+
+## Updated translations
+
+* Finnish (by maintainer Jyri-Petteri ”ZeiP” Paloposki)
+* Turkish (thanks Burak Ekseli!)
+* Spanish (thanks Francisco Serrador!)
+
+## Version 2.5.2
+
+### New features
+
+* Whole Tracks is now translatable.
+* New Finnish locale by the maintainer Jyri-Petteri ”ZeiP” Paloposki.
+* Update last login field when validating an existing login.
+* Show more users in the user list and allow changing the order criteria.
+
+### Bug fixes
+
+* Fix tag-specific task lists to work in a multi-user environment.
+* Fix setting the due date in the calendar view.
+* Fix a bug causing 500 errors for users with different locales.
+* Lots of dependencies have been upgraded.
+* Better CI tests.
+* Code style fixes.
+* Small style issues.
+
 ## Version 2.5.1
 
 ### Security issue disclosure
