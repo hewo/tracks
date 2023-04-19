@@ -2,6 +2,8 @@
 
 [![Build Status](https://github.com/TracksApp/tracks/workflows/Continuous%20Integration/badge.svg)](https://github.com/TracksApp/tracks/actions)
 [![Code Climate](https://codeclimate.com/github/TracksApp/tracks/badges/gpa.svg)](https://codeclimate.com/github/TracksApp/tracks)
+[![Translation status](https://hosted.weblate.org/widgets/tracks/-/tracks/svg-badge.svg)](https://hosted.weblate.org/engage/tracks/)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/6459/badge)](https://bestpractices.coreinfrastructure.org/projects/6459)
 
 ## About
 
@@ -11,7 +13,7 @@
 * Hosted services: https://github.com/TracksApp/tracks/wiki/Hosted-Tracks
 * Bug reports and feature requests: https://github.com/TracksApp/tracks/issues
 * Mailing list: http://groups.google.com/group/TracksApp
-* IRC channel: #tracks on Freenode, available also on [Matrix](https://matrix.to/#/#tracks:matrix.org)
+* IRC channel: #tracks on Libera, available also on [Matrix](https://matrix.to/#/#tracks:matrix.org)
 * License: See COPYING
 
 Full instructions for both new installations and upgrades from older installations
@@ -27,6 +29,8 @@ Enjoy being productive!
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Principal maintainer: [Jyri-Petteri ”ZeiP” Paloposki](https://github.com/ZeiP)
   (sponsored by [Ardcoras oy](https://www.ardcoras.fi/), also available for paid consulting)
+  * If you want to support the maintainer's work, subscribe to the
+    [hosted version](https://www.taskitin.fi/).
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
 
 If you are thinking about contributing towards the development of Tracks,
