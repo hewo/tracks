@@ -2,7 +2,9 @@
 
 set -e
 
-docker_compose="docker-compose --file test-envs/docker-compose-$1-$2.yml"
+export RUBY_VERSION=$1
+
+docker_compose="docker compose --file test-envs/docker-compose-$2.yml"
 
 function cleanup() {
   $docker_compose down
@@ -20,7 +22,7 @@ export DATABASE_NAME=tracks_test
 
 $docker_compose build
 $docker_compose up -d
-script/poll-for-db
+script/poll-for-db $2
 
 # Leaving this in since it will be needed for Rails 5
 $docker_compose run web bin/rails db:environment:set RAILS_ENV=test || true
@@ -32,5 +34,5 @@ else
   $docker_compose run web bin/rake db:migrate
   $docker_compose run web bin/rake db:seed
 fi
-$docker_compose run web bin/rake test
-
+echo "==> Running the tests…"
+$docker_compose run web bin/rails test

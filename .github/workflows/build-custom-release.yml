@@ -1,16 +1,27 @@
 ---
-name: 'Build latest'
+name: 'Build custom release'
 on:
-  push:
-    branches:
-    - master
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release'
+        required: true
+        type: string
+      name:
+        description: 'Name of the release'
+        required: true
+        type: string
 
 jobs:
-  build-and-publish-latest:
-    name: 'Build latest'
+  build-and-publish-release:
+    name: 'Build custom release'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2 # Checking out the repo
+      -
+        name: Checkout the code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.tag }}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -38,8 +49,7 @@ jobs:
           target: production
           push: true
           tags: |
-            tracksapp/tracks:latest
-            tracksapp/tracks:master
-            ghcr.io/tracksapp/tracks:latest
+            tracksapp/tracks:${{ inputs.name }}
+            ghcr.io/tracksapp/tracks:${{ inputs.name }}
 
 #          platforms: linux/amd64,linux/arm64

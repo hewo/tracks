@@ -81,13 +81,15 @@ class UsersController < ApplicationController
         end
 
         unless params['approve_tos'] == 'on' || SITE_CONFIG['tos_link'].blank?
-          render_failure "You have to accept the terms of service to sign up!"
+          notify :error,  t('users.tos_error')
+          redirect_to signup_path
           return
         end
 
         user = User.new(user_params)
 
         unless user.valid?
+          notify :error,  t('users.create_error')
           redirect_to signup_path
           return
         end
@@ -125,7 +127,7 @@ class UsersController < ApplicationController
         unless user.new_record?
           render :body => t('users.user_created'), :status => 200
         else
-          render_failure user.errors.to_xml, 409
+          render_failure user.errors.full_messages.to_xml(root: "errors", skip_types: true), 409
         end
         return
       end
